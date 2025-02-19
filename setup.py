@@ -10,7 +10,7 @@ setup(
     description="principle alignment package",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/mypackage",
+    url="git@github.com:ZJCODE/principle-alignment.git",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

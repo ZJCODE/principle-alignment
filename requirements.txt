@@ -1,0 +1,6 @@
+# requirements.txt
+
+# List your project dependencies here
+# Example:
+# requests==2.25.1
+# numpy==1.19.5

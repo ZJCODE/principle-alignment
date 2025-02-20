@@ -18,5 +18,16 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+dependencies = [
+    "fastapi",
+    "pyyaml",
+    "openai",
+    "python-dotenv",
+    "tenacity",
+]
+
 [project.urls]
 Repository = "https://github.com/ZJCODE/principle-alignment"
+
+[tool.setuptools]
+packages = {find = {include = ["principle_alignment*"], exclude = ["examples*"]}}

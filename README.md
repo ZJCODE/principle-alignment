@@ -1,39 +1,53 @@
-# README.md
 
-# Python Package
-
-## Overview
-
-This is a Python package designed to provide [brief description of the package functionality]. It serves as a template for creating Python projects with a structured layout.
 
 ## Installation
 
-To install the package, clone the repository and install the required dependencies:
+
+### Install from pypi
+
+You can install the package from pypi
 
 ```bash
-git clone [repository-url]
-cd python-package
-pip install -r requirements.txt
+pip install principle-alignment  -i https://pypi.org/simple
 ```
 
-## Usage
-
-To use the package, you can import it in your Python scripts:
-
-```python
-from my_package import [module_name]
-```
-
-Replace `[module_name]` with the specific module you want to use.
-
-## Running Tests
-
-To run the tests for this package, use the following command:
+You can also upgrade the package from pypi
 
 ```bash
-pytest tests/
+pip install principle-alignment  --upgrade -i https://pypi.org/simple
 ```
 
-## License
+### Install from source
 
-This project is licensed under the [License Name]. See the LICENSE file for more details.
+You can also install the package directly from source:
+
+```bash
+pip install .
+```
+
+For development installation:
+
+```bash
+pip install -e .
+```
+
+
+
+## Package Upload
+
+First time upload
+
+```bash
+pip install build twine
+python -m build
+twine upload dist/*
+```
+
+Subsequent uploads
+
+```bash
+rm -rf dist/ build/ *.egg-info/
+python -m build
+twine upload dist/*
+```
+

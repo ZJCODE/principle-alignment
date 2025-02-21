@@ -73,7 +73,14 @@ alignment.prepare(principles=["Do no harm", "Respect user privacy"])
 
 ```python
 # Or load principles from a file
+# Path to a text file containing principles (one per line).
 alignment.prepare(principles_file="principles.md")
+```
+
+```python
+# Can temporarily override the client and model in the prepare method
+# This only run once ,so can use more powerful model to understand the principles
+alignment.prepare(principles=["Do no harm", "Respect user privacy"], client=other_client, model=other_model)
 ```
 
 do the alignment

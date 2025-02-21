@@ -1,3 +1,3 @@
-# This file is intentionally left blank.
+# This file is intentionally left blank
 
-from .play import hello
+from .alignment import Alignment

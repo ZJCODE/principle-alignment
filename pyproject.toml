@@ -24,6 +24,7 @@ dependencies = [
     "openai",
     "python-dotenv",
     "tenacity",
+    "requests",
 ]
 
 [project.urls]

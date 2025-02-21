@@ -49,18 +49,34 @@ from principle_alignment import Alignment
 
 load_dotenv() # Load environment variables from .env file
 
+# support openai
 openai_client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
     base_url=os.environ.get("OPENAI_BASE_URL"),
 )
 
-model = "gpt-4o-mini"
+openai_model = "gpt-4o-mini"
+
+# support deepseek
+deepseek_client = OpenAI(
+    api_key=os.environ.get("DEEPSEEK_API_KEY"),
+    base_url=os.environ.get("DEEPSEEK_BASE_URL"),
+)
+
+deepseek_model = "deepseek-chat"
+
+client = openai_client
+model = openai_model
+
+# client = deepseek_client
+# model = deepseek_model
+
 ```
 
 initialize the alignment object
 
 ```python
-alignment = Alignment(client=openai_client, model=model,verbose=False)
+alignment = Alignment(client=client, model=model,verbose=False)
 ```
 
 let the alignment load and understand the principles

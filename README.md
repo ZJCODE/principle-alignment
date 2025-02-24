@@ -89,6 +89,8 @@ python server.py
 
 ##### Just Align Mode
 
+example
+
 ```bash
 curl -X POST "http://localhost:8080/align" \
      -H "Content-Type: application/json" \
@@ -256,6 +258,8 @@ example output
     "explanation": "The statement indicates that Tom is being excluded from joining the club based on his membership status, which contradicts the principle of Radical Inclusion. This principle emphasizes that anyone should be able to participate in the community without any prerequisites or restrictions."
 }
 ```
+
+no violation example
 
 ```python
 user_input = "You are so nice to me."

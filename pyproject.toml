@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "principle-alignment"
-version = "0.1.8"
+version = "0.1.9"
 description = "principle alignment package"
 readme = "README.md"
 authors = [

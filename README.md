@@ -107,6 +107,28 @@ output:
 }
 ```
 
+multi violation example
+
+```bash
+curl -X POST "http://localhost:8080/align" \
+     -H "Content-Type: application/json" \
+     -d '{"text": "we can collect user data without their consent and hurt people by using words"}'
+```
+
+output:
+
+```json
+{
+  "is_violation": true,
+  "violated_principles": [
+    "1. Do no harm",
+    "2. Respect user privacy"
+  ],
+  "explanation": "The statement indicates an intention to collect user data without consent, which violates the principle of respecting user privacy. Additionally, the mention of hurting people by using words suggests a willingness to cause harm, violating the principle of doing no harm.",
+  "rectification": null
+}
+```
+
 no violation example
 
 ```bash

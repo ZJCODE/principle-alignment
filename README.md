@@ -82,7 +82,7 @@ run the server:
 python server.py
 ```
 
-test the server:
+test the server (just align):
 
 ```bash
 curl -X POST "http://localhost:8080/align" \
@@ -93,9 +93,31 @@ curl -X POST "http://localhost:8080/align" \
 output:
 
 ```json
-{"is_violation":true,
-"violated_principle":"2. Respect user privacy",
-"explanation":"Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used. Failing to obtain consent undermines their autonomy and trust."}
+{
+    "is_violation":true,
+    "violated_principle":"2. Respect user privacy",
+    "explanation":"Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used, and they must provide explicit consent for their data to be gathered.",
+    "rectification":null
+}
+```
+
+test the server (align and rectify):
+
+```bash
+curl -X POST "http://localhost:8080/align" \
+     -H "Content-Type: application/json" \
+     -d '{"text": "we can collect user data without their consent","rectify":true}'
+```
+
+output:
+
+```json
+{
+    "is_violation":true,
+    "violated_principle":"2. Respect user privacy",
+    "explanation":"Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used, and they must provide explicit consent for their data to be gathered.",
+    "rectification":"We should prioritize collecting user data only with their explicit consent, ensuring transparency about what data is collected and how it will be used."
+}
 ```
 
 ## Usage (Detail Version)
@@ -179,7 +201,8 @@ example output
 {
     "is_violation": true,
     "violated_principle": "1. [Radical Inclusion] Anyone may be a part of Burning Man. We welcome and respect the stranger. No prerequisites exist for participation in our community.",
-    "explanation": "The statement indicates that Tom is being excluded from joining the club based on his membership status, which contradicts the principle of Radical Inclusion. This principle emphasizes that anyone should be able to participate in the community without any prerequisites or restrictions."
+    "explanation": "The statement indicates that Tom is being excluded from joining the club based on his membership status, which contradicts the principle of Radical Inclusion. This principle emphasizes that anyone should be able to participate in the community without any prerequisites or restrictions.",
+    "rectification":null
 }
 ```
 
@@ -195,7 +218,27 @@ example output
 {
     "is_violation": false,
     "violated_principle": null,
-    "explanation": null
+    "explanation": null,
+    "rectification":null
+}
+```
+
+do the alignment with rectification
+
+```python
+user_input = "Tom is not allowed to join this club because he is not a member."
+result = alignment.align_and_rectify(user_input)
+print(json.dumps(result, indent=4))
+```
+
+example output
+
+```json
+{
+    "is_violation": true,
+    "violated_principle": "1. [Radical Inclusion] Anyone may be a part of Burning Man. We welcome and respect the stranger. No prerequisites exist for participation in our community.",
+    "explanation": "The statement indicates that Tom is being excluded from joining the club based on his membership status, which contradicts the principle of Radical Inclusion that emphasizes welcoming and respecting all individuals without prerequisites for participation.",
+    "rectification": "Tom is currently not a member of this club, but we encourage him to explore ways to get involved and participate."
 }
 ```
 

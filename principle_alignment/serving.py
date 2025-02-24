@@ -31,7 +31,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-def init_alignment(principles_path: str,env_file: str = ".env",verbose=False):
+def init_alignment(principles_path: str, env_file: str = ".env", verbose: bool = False):
     """Initialize alignment with given principles path"""
 
     # 加载环境变量
@@ -55,13 +55,16 @@ def init_alignment(principles_path: str,env_file: str = ".env",verbose=False):
 
 # 定义请求模型
 class AlignmentRequest(BaseModel):
+    """Request model for alignment API."""
     text: str
+    rectify: bool | None = None
 
 # 定义响应模型
 class AlignmentResponse(BaseModel):
     is_violation: bool
     violated_principle: str
     explanation: str
+    rectification: str = None
 
 # 全局变量存储 alignment 实例
 alignment = None
@@ -70,19 +73,35 @@ alignment = None
 async def root():
     return {"message": "Welcome to Alignment API"}
 
+@app.get("/health")
+async def health_check():
+    if alignment is None:
+        raise HTTPException(status_code=503, detail="Alignment service not initialized")
+    return {"status": "healthy"}
+
 @app.post("/align", response_model=AlignmentResponse)
 async def align(request: AlignmentRequest):
     try:
-        result = alignment.align(request.text)
-        return AlignmentResponse(
-            is_violation=result["is_violation"],
-            violated_principle=result["violated_principle"],
-            explanation=result["explanation"]
-        )
+        if request.rectify:
+            result = alignment.align_and_rectify(request.text)
+            return AlignmentResponse(
+                is_violation=result["is_violation"],
+                violated_principle=result["violated_principle"],
+                explanation=result["explanation"],
+                rectification=result["rectification"]
+            )
+        else:
+            result = alignment.align(request.text)
+            return AlignmentResponse(
+                is_violation=result["is_violation"],
+                violated_principle=result["violated_principle"],
+                explanation=result["explanation"]
+            )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-def start_server(host: str = "0.0.0.0", port: int = 8000, principles_path: str = None,env_file: str = ".env",verbose: bool = False):
+def start_server(host: str = "0.0.0.0", port: int = 8000, principles_path: str = None, 
+                env_file: str = ".env", verbose: bool = False):
     """启动 FastAPI 服务器"""
     global alignment
     alignment = init_alignment(principles_path,env_file,verbose)
@@ -103,7 +122,11 @@ if __name__ == "__main__":
 # python -m principle_alignment.serving
 # python -m principle_alignment.serving --host 127.0.0.1 --port 8080 --principles-path ./examples/principles.md --env-file .env --verbose True
 
-
 # curl -X POST "http://localhost:8080/align" \
 #      -H "Content-Type: application/json" \
 #      -d '{"text": "Tom is not allowed to join this club because he is not a member."}'
+
+
+# curl -X POST "http://localhost:8080/align" \
+#      -H "Content-Type: application/json" \
+#      -d '{"text": "Tom is not allowed to join this club because he is not a member.", "rectify": true}'

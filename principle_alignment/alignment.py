@@ -219,6 +219,92 @@ class Alignment:
             self.__logger.log("error", f"Error during alignment analysis: {str(e)}", color="red")
             raise RuntimeError(f"Alignment analysis failed: {str(e)}")
 
+    def align_and_rectify(self, user_input: str) -> Dict:
+        """
+        Analyze user input for potential principle violations and suggest rectification.
+        
+        Args:
+            user_input: Text to analyze for violations
+            
+        Returns:
+            {
+                "is_violation": bool,
+                "violated_principle": str | None,
+                "explanation": str | None,
+                "rectification": str | None
+            }
+                
+        Raises:
+            AlignmentError: When alignment analysis fails
+            ValueError: When input validation fails
+                
+        Note:
+            prepare() must be called successfully before using this method. This ensures
+            that principles are loaded and the system prompt is generated.
+            
+        Examples:
+            Basic usage:
+            >>> alignment = Alignment(client=OpenAIInstance, model="gpt-4")
+            >>> alignment.prepare(principles=["Respect privacy", "Do no harm"])
+            >>> result = alignment.align_and_recitify("Let's collect user data without consent")
+            >>> print(result)
+            {
+                "is_violation": true,
+                "violated_principle": "Respect privacy",
+                "explanation": "The suggestion to collect user data without consent...",
+                "rectification": "It is recommended to obtain user consent before collecting data."
+            }
+
+            No violation case:
+            >>> result = alignment.align_and_recitify("Let's help users improve their productivity")
+            >>> print(result)
+            {
+                "is_violation": false,
+                "violated_principle": null,
+                "explanation": null,
+                "rectification": null
+            }
+        """
+        result = self.align(user_input)
+        
+        if result.get("is_violation"):
+            rectification = self.__generate_rectification(user_input, result.get("explanation"))
+        else:
+            rectification = None
+        result["rectification"] = rectification
+        
+        return result
+    
+    def __generate_rectification(self, user_input: str, explanation: str) -> str:
+        """
+        Generate a rectification suggestion based on the input and explanation.
+        
+        Args:
+            user_input: User input that violated a principle
+            explanation: Detailed explanation of the violation
+            
+        Returns:
+            str: Suggested rectification
+        """
+
+        system_prompt, user_prompt = self.__build_rectification_prompt(user_input, explanation)
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            temperature=0.0,
+            response_format={"type": "json_object"}
+        )
+
+        revised_content = json.loads(response.choices[0].message.content).get("revised_content", "")
+        
+        return revised_content    
+
     def __load_principles(self, 
                        principles: Optional[List[str]] = None, 
                        principles_file: Optional[str] = None) -> None:
@@ -357,6 +443,58 @@ class Alignment:
         except Exception as e:
             self.__logger.log("error", f"Error generating violations example for principle: {principle} - {str(e)}",color="red")
             raise
+
+
+    def __build_rectification_prompt(self, user_input: str, explanation: str) -> tuple[str, str]:
+        """
+        Build the prompt for content rectification.
+
+        Args:
+            user_input: Original user input
+            explanation: Explanation of the violation
+
+        Returns:
+            tuple: System prompt and user prompt
+        """
+        
+        system_prompt = """You are an AI assistant specialized in content refinement and alignment principles. Your role is to:
+        1. Analyze content that potentially violates alignment principles
+        2. Maintain the original message's core intent and tone
+        3. Provide suggestions that align with ethical principles
+        4. Ensure the revised content is clear, appropriate, and maintains its original purpose
+
+        Key guidelines:
+        - Preserve the essential meaning while removing problematic elements
+        - Keep the same communication style and tone
+        - Consider context and audience in revisions
+        """
+
+        user_prompt = f"""
+        ### Original Content
+        {user_input}
+
+        ### Violation Details
+        {explanation}
+
+        ### Required Output Format
+        Provide a JSON response with:
+        1. A concise summary of the original content's intent
+        2. A carefully revised version that addresses the violation while maintaining the core message
+
+        ### JSON Schema
+        {{
+            "content_intent": "Brief summary of the original message's purpose and key points",
+            "revised_content": "Aligned version that preserves the original tone and intent"
+        }}
+
+        ### Important Notes
+        - Keep the message structure if it's a direct communication
+        - Maintain any specific addressee information
+        - Preserve formatting and style where appropriate
+        """
+
+        return system_prompt, user_prompt
+
 
     def __build_violations_prompt(self, principle: str) -> str:
         """

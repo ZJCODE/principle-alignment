@@ -1,12 +1,13 @@
 
 ## Introduction
 
-Principle Alignment is a Python library that helps you align your AI models with your own defined principles. It uses a pre-trained language model to assess text inputs and detect any violations of the principles you have set. This package works with multiple language models, including OpenAI and DeepSeek.
+Principle Alignment is a Python library that helps you match AI models with your own principles.
 
-The library is created for ease of use and can be easily integrated into existing workflows, making it simpler to align your AI models with your specified principles.
+It uses a large language model (LLM) to understand these principles through a "cognition-decision-behavior" approach. The library checks text inputs (with plans for multimodal support in the future) to find any possible violations of your principles. Principle Alignment works with different language models, such as OpenAI and DeepSeek, giving you flexibility.
 
-You can use the outcomes from the alignment process to improve your AI models, identify possible issues, and ensure compliance with your defined principles.
+The library is user-friendly and can be easily added to your current workflows, making it easier to align your AI models with those principles.
 
+You can use the results from this alignment process to improve your AI models, spot potential problems, and ensure they follow your principles.
 
 ## Installation
 

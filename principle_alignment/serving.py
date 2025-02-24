@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import List
+from typing import List,Optional
 import uvicorn
 from principle_alignment import Alignment
 from principle_alignment.utilities.logger import Logger
@@ -66,8 +66,8 @@ class AlignmentRequest(BaseModel):
 class AlignmentResponse(BaseModel):
     is_violation: bool
     violated_principles: List[str]
-    explanation: str
-    rectification: str = None
+    explanation: Optional[str] = None
+    rectification: Optional[str] = None
 
 # 全局变量存储 alignment 实例
 alignment = None
@@ -84,7 +84,7 @@ async def health_check():
 
 @app.post("/align", response_model=AlignmentResponse)
 async def align(request: AlignmentRequest):
-    try:
+    try:  
         if request.rectify:
             result = alignment.align_and_rectify(request.text)
             return AlignmentResponse(

@@ -40,8 +40,9 @@ pip install -e .
 ```
 
 
-## Usage (Serving Version)
+## Usage ( Used By HTTP Server )
 
+### Serving
 
 Create a `.env` file with your API configurations:
 
@@ -75,14 +76,16 @@ start_server(
 ```
 
 
-
 run the server:
 
 ```bash
 python server.py
 ```
 
-test the server (just align):
+### Testing
+
+
+##### Just Align Mode
 
 ```bash
 curl -X POST "http://localhost:8080/align" \
@@ -103,7 +106,27 @@ output:
 }
 ```
 
-test the server (align and rectify):
+no violation example
+
+```bash
+curl -X POST "http://localhost:8080/align" \
+     -H "Content-Type: application/json" \
+     -d '{"text": "you are so nice"}'
+```
+
+output:
+
+```json
+{
+  "is_violation": false,
+  "violated_principles": [],
+  "explanation": null,
+  "rectification": null
+}
+```
+
+
+##### Align And Rectify Mode
 
 ```bash
 curl -X POST "http://localhost:8080/align" \
@@ -124,8 +147,7 @@ output:
 }
 ```
 
-## Usage (Detail Version)
-
+## Usage ( Used By Python Code )
 
 Prepare the client and model
 

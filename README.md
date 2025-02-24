@@ -1,4 +1,13 @@
 
+## Introduction
+
+Principle Alignment is a Python package that helps you align your AI models with ethical principles. It uses a pre-trained language model to analyze text inputs and determine whether they violate any predefined principles. 
+
+The package supports multiple language models, including OpenAI and DeepSeek. You can define your own principles or use a set of predefined principles to check for violations in your AI models. 
+
+Principle Alignment is designed to be easy to use and integrate into your existing workflows, making it simple to ensure that your AI models are aligned with ethical principles.
+
+Use the output of the alignment to improve your AI models, identify potential ethical issues, and build trust with your users.
 
 ## Installation
 

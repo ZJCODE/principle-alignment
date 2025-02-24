@@ -41,7 +41,7 @@ pip install -e .
 ```
 
 
-## Usage ( Used By HTTP Server )
+## Usage ( HTTP Server )
 
 ### Serving
 
@@ -171,7 +171,7 @@ output:
 }
 ```
 
-## Usage ( Used By Python Code )
+## Usage ( Python Code )
 
 Prepare the client and model
 

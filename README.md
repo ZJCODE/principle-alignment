@@ -94,10 +94,12 @@ output:
 
 ```json
 {
-    "is_violation":true,
-    "violated_principle":"2. Respect user privacy",
-    "explanation":"Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used, and they must provide explicit consent for their data to be gathered.",
-    "rectification":null
+  "is_violation": true,
+  "violated_principle": [
+    "2. Respect user privacy"
+  ],
+  "explanation": "Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used, and they must provide explicit consent for their data to be gathered.",
+  "rectification": null
 }
 ```
 
@@ -113,10 +115,12 @@ output:
 
 ```json
 {
-    "is_violation":true,
-    "violated_principle":"2. Respect user privacy",
-    "explanation":"Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used, and they must provide explicit consent for their data to be gathered.",
-    "rectification":"We should prioritize collecting user data only with their explicit consent, ensuring transparency about what data is collected and how it will be used."
+  "is_violation": true,
+  "violated_principle": [
+    "2. Respect user privacy"
+  ],
+  "explanation": "Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used, and they must provide explicit consent for their data to be gathered.",
+  "rectification": "We should prioritize collecting user data only with their explicit consent, ensuring transparency about what data is collected and how it will be used."
 }
 ```
 
@@ -200,9 +204,10 @@ example output
 ```json
 {
     "is_violation": true,
-    "violated_principle": "1. [Radical Inclusion] Anyone may be a part of Burning Man. We welcome and respect the stranger. No prerequisites exist for participation in our community.",
-    "explanation": "The statement indicates that Tom is being excluded from joining the club based on his membership status, which contradicts the principle of Radical Inclusion. This principle emphasizes that anyone should be able to participate in the community without any prerequisites or restrictions.",
-    "rectification":null
+    "violated_principles": [
+        "1. [Radical Inclusion] Anyone may be a part of Burning Man. We welcome and respect the stranger. No prerequisites exist for participation in our community."
+    ],
+    "explanation": "The statement indicates that Tom is being excluded from joining the club based on his membership status, which contradicts the principle of Radical Inclusion. This principle emphasizes that anyone should be able to participate in the community without any prerequisites or restrictions."
 }
 ```
 
@@ -217,9 +222,8 @@ example output
 ```json
 {
     "is_violation": false,
-    "violated_principle": null,
-    "explanation": null,
-    "rectification":null
+    "violated_principles": [],
+    "explanation": null
 }
 ```
 
@@ -236,9 +240,11 @@ example output
 ```json
 {
     "is_violation": true,
-    "violated_principle": "1. [Radical Inclusion] Anyone may be a part of Burning Man. We welcome and respect the stranger. No prerequisites exist for participation in our community.",
-    "explanation": "The statement indicates that Tom is being excluded from joining the club based on his membership status, which contradicts the principle of Radical Inclusion that emphasizes welcoming and respecting all individuals without prerequisites for participation.",
-    "rectification": "Tom is currently not a member of this club, but we encourage him to explore ways to get involved and participate."
+    "violated_principles": [
+        "1. [Radical Inclusion] Anyone may be a part of Burning Man. We welcome and respect the stranger. No prerequisites exist for participation in our community."
+    ],
+    "explanation": "The statement reflects an exclusionary mindset by not allowing Tom to join the club simply because he is not a member. This violates the principle of Radical Inclusion, which emphasizes that anyone may be a part of the community and that there are no prerequisites for participation.",
+    "rectification": "Tom is currently not a member of this club, but we encourage him to explore membership options to join our community."
 }
 ```
 

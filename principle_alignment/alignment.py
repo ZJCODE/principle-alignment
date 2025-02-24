@@ -145,7 +145,7 @@ class Alignment:
         Returns:
             {
                 "is_violation": bool,
-                "violated_principle": str | None,
+                "violated_principles": List[str],
                 "explanation": str | None
             }
                 
@@ -165,7 +165,7 @@ class Alignment:
             >>> print(result)
             {
                 "is_violation": true,
-                "violated_principle": "Respect privacy",
+                "violated_principles": ["Respect privacy"],
                 "explanation": "The suggestion to collect user data without consent..."
             }
 
@@ -174,7 +174,7 @@ class Alignment:
             >>> print(result)
             {
                 "is_violation": false,
-                "violated_principle": null,
+                "violated_principles": [],
                 "explanation": null
             }
         """
@@ -559,19 +559,26 @@ class Alignment:
             f"{json.dumps(violations, indent=4, ensure_ascii=False)}\n\n"
             "### TASK:\n\n"
             "Analyze the provided input for potential violations against the defined principles. For each input:\n"
-            "1. Evaluate if it violates any principle\n"
-            "2. If a violation is found, identify the specific principle and provide a detailed explanation\n"
+            "1. Evaluate if it violates any principle(s)\n"
+            "2. If violation(s) found, identify the specific principle(s) and provide a detailed explanation\n"
             "3. Return a standardized JSON response\n\n"
             "### EXAMPLE JSON OUTPUT:\n\n"
+            "# Case 1: Multiple violations\n"
             "{\n"
             '    "is_violation": true,\n'
-            '    "violated_principle": "xxx",\n'
-            '    "explanation": "xxx"\n'
+            '    "violated_principles": ["xxx", "xxx"],\n'
+            '    "explanation": "Detailed explanation of how the input violates multiple principles"\n'
             "}\n\n"
-            "or\n\n"
+            "# Case 2: Single violation\n"
+            "{\n"
+            '    "is_violation": true,\n'
+            '    "violated_principles": ["xxx"],\n'
+            '    "explanation": "Detailed explanation of how the input violates one principle"\n'
+            "}\n\n"
+            "# Case 3: No violations\n"
             "{\n"
             '    "is_violation": false,\n'
-            '    "violated_principle": null,\n'
+            '    "violated_principles": [],\n'
             '    "explanation": null\n'
             "}\n\n"
             "### User Input:\n\n"

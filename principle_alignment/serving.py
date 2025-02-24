@@ -4,8 +4,11 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from typing import List
 import uvicorn
 from principle_alignment import Alignment
+from principle_alignment.utilities.logger import Logger
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Principle Alignment API Server')
@@ -62,7 +65,7 @@ class AlignmentRequest(BaseModel):
 # 定义响应模型
 class AlignmentResponse(BaseModel):
     is_violation: bool
-    violated_principle: str
+    violated_principles: List[str]
     explanation: str
     rectification: str = None
 
@@ -86,7 +89,7 @@ async def align(request: AlignmentRequest):
             result = alignment.align_and_rectify(request.text)
             return AlignmentResponse(
                 is_violation=result["is_violation"],
-                violated_principle=result["violated_principle"],
+                violated_principles=result["violated_principles"],
                 explanation=result["explanation"],
                 rectification=result["rectification"]
             )
@@ -94,7 +97,7 @@ async def align(request: AlignmentRequest):
             result = alignment.align(request.text)
             return AlignmentResponse(
                 is_violation=result["is_violation"],
-                violated_principle=result["violated_principle"],
+                violated_principles=result["violated_principles"],
                 explanation=result["explanation"]
             )
     except Exception as e:

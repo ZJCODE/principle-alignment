@@ -16,12 +16,13 @@ def parse_args():
     parser.add_argument('--principles-path', type=str,
                        default=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "principles.md"),
                        help='Path to principles.md file')
+    parser.add_argument('--env-file', type=str, default='.env',
+                       help='Path to .env file (default: .env)')
     parser.add_argument('--verbose', type=bool, default=False,
                        help='Verbose mode (default: False)')
     return parser.parse_args()
 
-# 加载环境变量
-load_dotenv()
+
 
 # 创建 FastAPI 实例
 app = FastAPI(
@@ -30,8 +31,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
-def init_alignment(principles_path: str,verbose=False):
+def init_alignment(principles_path: str,env_file: str = ".env",verbose=False):
     """Initialize alignment with given principles path"""
+
+    # 加载环境变量
+    load_dotenv(env_file)
     # 初始化 OpenAI 客户端 以及 模型
     openai_client = OpenAI(
         api_key=os.environ.get("API_KEY"),
@@ -78,10 +82,10 @@ async def align(request: AlignmentRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-def start_server(host: str = "0.0.0.0", port: int = 8000, principles_path: str = None,verbose: bool = False):
+def start_server(host: str = "0.0.0.0", port: int = 8000, principles_path: str = None,env_file: str = ".env",verbose: bool = False):
     """启动 FastAPI 服务器"""
     global alignment
-    alignment = init_alignment(principles_path,verbose)
+    alignment = init_alignment(principles_path,env_file,verbose)
     print(f"Starting server on {host}:{port}")
     uvicorn.run(app, host=host, port=port)
 
@@ -91,12 +95,13 @@ if __name__ == "__main__":
         host=args.host,
         port=args.port,
         principles_path=args.principles_path,
+        env_file=args.env_file,
         verbose=args.verbose
     )
 
 
 # python -m principle_alignment.serving
-# python -m principle_alignment.serving --host 127.0.0.1 --port 8080 --principles-path ./examples/principles.md --verbose True
+# python -m principle_alignment.serving --host 127.0.0.1 --port 8080 --principles-path ./examples/principles.md --env-file .env --verbose True
 
 
 # curl -X POST "http://localhost:8080/align" \

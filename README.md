@@ -35,7 +35,16 @@ pip install -e .
 ## Usage (Serving Version)
 
 
-create a principles.md file with the principles you want to align with (one per line):
+Create a `.env` file with your API configurations:
+
+```bash
+API_KEY=your_api_key
+BASE_URL=your_base_url  
+MODEL=your_model_name
+```
+
+
+create a `principles.md` file with the principles you want to align with (one per line):
 
 ```markdown
 1. Do no harm
@@ -52,17 +61,12 @@ start_server(
     host="127.0.0.1",
     port=8080,
     principles_path="./principles.md", # Path to pre-defined principles file
+    env_file=".env", # Path to environment variables file
     verbose=True
 )
 ```
 
-Create a `.env` file with your API configurations (put this file in the same directory as the server.py file):
 
-```bash
-API_KEY=your_api_key
-BASE_URL=your_base_url  
-MODEL=your_model_name
-```
 
 run the server:
 

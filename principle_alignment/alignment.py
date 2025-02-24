@@ -295,41 +295,34 @@ class Alignment:
         self.model = self.__backup_model
 
     def __generate_system_prompt(self) -> None:
-        """
-        Generate a system prompt for principle violation analysis.
-
-        Args:
-            with_examples: Whether to include violation examples in the prompt
-
-        Returns:
-            str: Formatted system prompt
-
-        Raises:
-            ValueError: If principles is empty or if client is None when with_examples=True
-        """
+        """Generate system prompt for principle violation analysis."""
         self.__logger.log("info", "Generating system prompt for principle violation analysis")
         
         if not self.principles:
-            self.__logger.log("error", "No principles loaded. Call __load_principles first.",color="red")
-            raise ValueError("No principles loaded. Call __load_principles first.")
+            self.__logger.log("error", "No principles loaded")
+            raise ValueError("No principles loaded")
         
         try:
-            violations = []
-            self.__logger.log("info", "Generating violations examples for each principle...")
-            
-            for principle in self.principles:
-                self.__logger.log("info", f"Generating violations example for principle:\n\n {principle}",color="bold_blue")
-                violations_example = self.__get_violations_example(principle)
-                violations_example["principle"] = principle
-                violations.append(violations_example)
-            
-            system_prompt = self.__build_system_prompt(self.principles, violations)
-            self.__logger.log("success", "System prompt generated successfully",color="bold_green")
-            self.__system_prompt = system_prompt
+            violations = self.__generate_violations_examples()
+            self.__system_prompt = self.__build_system_prompt(self.principles, violations)
+            self.__logger.log("success", "System prompt generated successfully")
             
         except Exception as e:
-            self.__logger.log("error", f"Error generating system prompt: {str(e)}",color="red")
-            raise
+            self.__logger.log("error", f"Error generating system prompt: {str(e)}")
+            raise RuntimeError(f"Error generating system prompt: {str(e)}")
+
+    def __generate_violations_examples(self) -> List[Dict]:
+        """Generate violation examples for all principles."""
+        violations = []
+        self.__logger.log("info", "Generating violations examples...")
+        
+        for principle in self.principles:
+            self.__logger.log("info", f"Processing principle: {principle}")
+            violations_example = self.__get_violations_example(principle)
+            violations_example["principle"] = principle
+            violations.append(violations_example)
+        
+        return violations
         
     @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
     def __get_violations_example(self, principle: str) -> Dict:

@@ -95,7 +95,7 @@ output:
 ```json
 {
   "is_violation": true,
-  "violated_principle": [
+  "violated_principles": [
     "2. Respect user privacy"
   ],
   "explanation": "Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used, and they must provide explicit consent for their data to be gathered.",
@@ -116,7 +116,7 @@ output:
 ```json
 {
   "is_violation": true,
-  "violated_principle": [
+  "violated_principles": [
     "2. Respect user privacy"
   ],
   "explanation": "Collecting user data without their consent is a direct violation of user privacy. Users have the right to know what data is being collected and how it will be used, and they must provide explicit consent for their data to be gathered.",
